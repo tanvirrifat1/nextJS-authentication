@@ -4,7 +4,7 @@ import Head from "next/head";
 import { UserOutlined } from "@ant-design/icons";
 const HomePage = () => {
   const { data: session } = useSession();
-
+  console.log(session);
   return (
     <div>
       <Head>
