@@ -1,13 +1,19 @@
 import { Avatar, Image } from "antd";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { UserOutlined } from "@ant-design/icons";
 import { auth } from "@/firebase/firebase.auth";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 const HomePage = () => {
   const { data: session } = useSession();
-  const [user, loading, error] = useAuthState(auth);
-  console.log(user);
+  const [user] = useAuthState(auth);
+
+  // const logout = () => {
+  //   signOut(auth);
+  // };
+
+  const [signOut, loading, error] = useSignOut(auth);
+
   return (
     <div>
       <Head>
@@ -24,6 +30,18 @@ const HomePage = () => {
       </h2>
       <div style={{ textAlign: "center", marginTop: "5%" }}>
         <Image width={200} src={session?.user?.image} />
+      </div>
+      <div>
+        <button
+          onClick={async () => {
+            const success = await signOut();
+            if (success) {
+              alert("You are sign out");
+            }
+          }}
+        >
+          Sign out
+        </button>
       </div>
     </div>
   );

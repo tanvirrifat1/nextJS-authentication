@@ -1,16 +1,23 @@
 import { Button } from "antd";
 import { GoogleOutlined, GithubOutlined } from "@ant-design/icons";
 import Head from "next/head";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useCreateUserWithEmailAndPassword,
+  useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import styles from "@/styles/Login.module.css";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { auth } from "@/firebase/firebase.auth";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const LoginPage = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-  console.log(user);
+
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -19,6 +26,7 @@ const LoginPage = () => {
 
   const onSubmit = (data) => {
     createUserWithEmailAndPassword(data.email, data.password);
+    router.push("/");
   };
 
   return (
@@ -40,7 +48,7 @@ const LoginPage = () => {
             }
           />
         </div>
-        <hr />
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="">Your Email</label>
 
@@ -56,7 +64,12 @@ const LoginPage = () => {
             />
             {errors.password && <span>Password is required</span>}
           </div>
-          <button type="submit">Login</button>
+          <div>
+            <button type="submit">Login</button>
+            <Link href="/signup">
+              <button>signUp</button>
+            </Link>
+          </div>
         </form>
       </div>
     </div>
